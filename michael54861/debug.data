@@ -1,0 +1,68 @@
+ => Current directory=/Users/Michael/Desktop/cs3212/michael54861
+ => Full pathname=/Users/Michael/Desktop/cs3212/michael54861/ex1.props
+ => Properties file contains 45 properties
+sortingTester.intLow=0
+problemValueType=min
+scale5=F0
+scale4=F0
+specialTest=false
+scale3=F0
+scale2=F0
+scale1=F0
+scale0=F0
+runsPerTest=1
+displayTime=true
+sortingTester.testIndex=false
+alg1=InsertionSort
+testPerformance=false
+alg0=SelectionSort
+alg0.type=shift1
+A5=1.0
+A4=1.0
+A3=1.0
+numTests=5
+A2=1.0
+A1=1.0
+A0=1.0
+sortingTester.testDecreasing=false
+maxExecTimeSeconds=3
+numAlgorithms=2
+debug=On
+display=false
+limitExecTime=false
+sortingTester.testComparable=false
+printToScreen=true
+printSummary=true
+alg1.type=shift1
+param0_testSize4=90000
+param0_testSize3=70000
+param0_testSize2=50000
+param0_testSize1=30000
+param0_testSize0=10000
+quiescentTime=1
+dictionary=/usr/dict/words
+sortingTester.intHigh=10
+testCorrectness=true
+numProblemParameters=1
+sortingTester.testLarge=true
+problemType=sorting
+Loading algorithm# 0 name=/Users/Michael/Desktop/cs3212/michael54861/SelectionSort ... 
+ ... completed.
+Loading algorithm# 1 name=/Users/Michael/Desktop/cs3212/michael54861/InsertionSort ... 
+ ... completed.
+ALGORITHM: michael5486's implementation of SelectionSort
+SortingTester.testCorrectness(): algorithm=michael5486's implementation of SelectionSort
+ => passed: test1: 1-element
+ => passed: test2: 2-elements
+ => passed: test3: 10-elements already sorted
+ => passed: test4: 10-elements reverse sorted
+ => passed: test5: 50 tests each with 10 random elements
+ => passed: test6: 1000 random elements
+ALGORITHM: michael5486's implementation of InsertionSort
+SortingTester.testCorrectness(): algorithm=michael5486's implementation of InsertionSort
+ => passed: test1: 1-element
+ => passed: test2: 2-elements
+ => passed: test3: 10-elements already sorted
+ => passed: test4: 10-elements reverse sorted
+ => passed: test5: 50 tests each with 10 random elements
+ => passed: test6: 1000 random elements
