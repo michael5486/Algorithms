@@ -69,3 +69,9 @@ SearchTester.testCompCorrectness(): algorithm=michael5486's implementation of Bi
  => passed: Test2: 2-element test
  => passed: Test3: 10-element test
  => passed: Test4: 50 random 10-element tests
+ => passed: Test6: deletion
+ALGORITHM: michael5486's implementation of SelfAdjTree
+SearchTester.testCompCorrectness(): algorithm=michael5486's implementation of SelfAdjTree
+ => passed: Test1: 1-element test
+ => passed: Test2: 2-element test
+ => passed: Test3: 10-element test
