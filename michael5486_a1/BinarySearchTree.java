@@ -7,8 +7,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 
 	public TreeNode root = new TreeNode();
 	int totalNodes = 0; //counter to keep track of TreeNodes
-	int index;
-	int height = 0;
+	int index; 
 
 	public BinarySearchTree() {
 
@@ -23,7 +22,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		return this.root;
 	}
 
-	public java.lang.Object insert(java.lang.Comparable key, java.lang.Object value) {
+	public java.lang.Object insert(java.lang.Comparable key, java.lang.Object value) { //inserts the node, and recursively finds the proper position for every child node
 
 		TreeNode newNode = new TreeNode(key, value, null, null, null);
 		if (this.getRoot() == null) {
@@ -67,7 +66,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		}
 	}
 
-	public TreeNode findNode(TreeNode node, Comparable key) {
+	public TreeNode findNode(TreeNode node, Comparable key) { //used in delete method
 		TreeNode foundNode = null;
 		if (key.compareTo(node.key) == 0) { //found matching node, return KeyValue pair
 			//System.out.println("Found node: " + key);
@@ -87,7 +86,11 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 	}
 
 	public java.lang.Object delete(java.lang.Comparable key) {
-		
+		/*This method is has all the necessary cases, and also has another 
+		seperate case for when the node being deleted is the root.
+		This is because in order to delere, I go the a node's parent.
+		The root doesn't have a parent, so I had to create seperate cases to avoid
+		getting a nullPointerException*/
 		Object toReturn = null;
 		TreeNode node = this.findNode(this.getRoot(), key);
 
@@ -121,7 +124,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 					this.root = node.right;
 					totalNodes--;
 				//	System.out.print("Tree after delete: ");
-					this.printTree();
+					//this.printTree();
 					return toReturn;				
 					}
 				else { //node has 2 children
@@ -217,7 +220,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		}
 	}
 
-	public edu.gwu.algtest.ComparableKeyValuePair maximum() {
+	public edu.gwu.algtest.ComparableKeyValuePair maximum() { //finds the rightmost node
 		TreeNode node = this.getRoot();
 		if (node == null) {
 			return null;
@@ -229,7 +232,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		return pair;
 	}
 
-	public edu.gwu.algtest.ComparableKeyValuePair minimum() {
+	public edu.gwu.algtest.ComparableKeyValuePair minimum() { //finds the leftmost node
 		TreeNode node = this.getRoot();
 		if (node == null) {
 			return null;
@@ -241,7 +244,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		return pair;
 	}
 
-	public edu.gwu.algtest.ComparableKeyValuePair search(java.lang.Comparable key) {
+	public edu.gwu.algtest.ComparableKeyValuePair search(java.lang.Comparable key) { //calls recursiveSearch with the root node
 		return recursiveSearch(this.getRoot(), key);
 	}
 
@@ -265,24 +268,24 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		return pair;
 	}
 
-	public java.util.Enumeration getKeys() {
+	public java.util.Enumeration getKeys() { //calls methods in a separate class where the Enumeration is created, populated with nodes, and ultimately returned
 		KeyEnumerator keys = new KeyEnumerator();
 		keys.createKeysEnumerator(totalNodes, this.getRoot());
 		return keys;
 
 	}
 
-	public java.util.Enumeration getValues() {
+	public java.util.Enumeration getValues() { //also another class, very similar to KeyEnumerations
 		ValueEnumerator values = new ValueEnumerator();
 		values.createValuesEnumerator(totalNodes, this.getRoot());
 		return values;
 	}
 
-	public int getCurrentSize() {
+	public int getCurrentSize() { //global variable totalNodes is incremented whenever a node is inserted, and decremented whenever a node is deleted. This way, totalNodes accurately reflects the total count of nodes in the BST
 		return totalNodes;
 	}
 
-	public void initialize(int maxSize) {
+	public void initialize(int maxSize) { //resets all global variables to prepare for a new BST
 		//System.out.println("Initializing new tree...");
 		this.root = null;
 		totalNodes = 0; //counter to keep track of TreeNodes
@@ -297,20 +300,20 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 
     }
 
-	public java.lang.Comparable successor(java.lang.Comparable key) {
+	public java.lang.Comparable successor(java.lang.Comparable key) { //iterates through the Enumeration, finding the next key in order
 		
-		System.out.println("Key: " + key);
+		//System.out.println("Key: " + key);
 		KeyEnumerator keys = new KeyEnumerator();
 		keys.createKeysEnumerator(totalNodes, this.getRoot());
-		System.out.println("Successor: " + keys.nextKey(key));
+		//System.out.println("Successor: " + keys.nextKey(key));
     	return keys.nextKey(key);
     }
 
-    public java.lang.Comparable predecessor(java.lang.Comparable key) {
-		System.out.println("Key: " + key);		
+    public java.lang.Comparable predecessor(java.lang.Comparable key) { //iterates through the enuemration, finding the previous key in order
+		//System.out.println("Key: " + key);		
 		KeyEnumerator keys = new KeyEnumerator();
 		keys.createKeysEnumerator(totalNodes, this.getRoot());
-		System.out.println("Predecessor: " + keys.prevKey(key));
+		//System.out.println("Predecessor: " + keys.prevKey(key));
     	return keys.prevKey(key);
     }
 

@@ -44,7 +44,6 @@ class KeyEnumerator implements Enumeration {
             }
         }
         i = i + 1;
-        System.out.println("i: " + i);
         if (i < 0 || i > keys.length - 1) {
             return null;
         }
@@ -76,7 +75,7 @@ class KeyEnumerator implements Enumeration {
         return this;
     }
 
-    public void recursiveFillArray(TreeNode node) {
+    public void recursiveFillArray(TreeNode node) { //similar to an inorder print, except it fills the keys array with key values
 
         if (node == null) {
 

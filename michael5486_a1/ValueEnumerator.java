@@ -41,7 +41,7 @@ class ValueEnumerator implements Enumeration {
         return this;
     }
 
-    public void recursiveFillArray(TreeNode node) {
+    public void recursiveFillArray(TreeNode node) { //similar to an inorder print, except it populates the values array instead
 
         if (node == null) {
 

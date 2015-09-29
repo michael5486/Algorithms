@@ -7,9 +7,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 
 	public TreeNode root = new TreeNode();
 	int totalNodes = 0; //counter to keep track of treenodes
-	int height = 0;
-	boolean found;
-	int attempts;
+	boolean found; //used in insert method
 
 	public SelfAdjTree() {
 
@@ -72,14 +70,14 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 			node.right = nodeToInsert;
 		}
 
-		this.printTree();
+		//this.printTree();
 	}
 
 
 	public TreeNode findNode(TreeNode node, Comparable key) { //used in delete method to locate node to delete
 		TreeNode foundNode = null;
 		if (key.compareTo(node.key) == 0) { //found matching node, return KeyValue pair
-			System.out.println("Found node: " + key);
+			//System.out.println("Found node: " + key);
 			foundNode = node;
 		}
 		else if (key.compareTo(node.key) < 0) { //recursiveSearch continues on left child
@@ -100,41 +98,38 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 		Object toReturn = null;
 		TreeNode node = this.findNode(this.getRoot(), key);
 
-		System.out.println("Deleting: " + key);
+		//System.out.println("Deleting: " + key);
 		if (node == null) { //case 1: node not found
-			System.out.print("KeyValue pair not found");
+			//System.out.print("KeyValue pair not found");
 			return toReturn;
 		}
 		else if (node == this.getRoot()) { //node is the leaf
 				if (node.left == null && node.right == null) {
-					System.out.println("Removing node with no children");
+					//System.out.println("Removing node with no children");
 					toReturn = node.value;
 					this.root = null;
 					totalNodes = 0;
-					System.out.print("Tree after delete: ");
-					this.printTree();
+					//this.printTree();
 					return toReturn;
 					}
 				else if (node.left != null && node.right == null) { //node has left child
-					System.out.println("Removing node with left child");
+					//System.out.println("Removing node with left child");
 					toReturn = node.value;
 					this.root = node.left;
 					totalNodes = 0;
-					System.out.print("Tree after delete: ");
-					this.printTree();
+					//this.printTree();
 					return toReturn;
 				}	
 				else if (node.left == null && node.right != null) { //node has right child
-					System.out.println("Removing node with right child");
+					//System.out.println("Removing node with right child");
 					toReturn = node.value;
 					this.root = node.right;
 					totalNodes = 0;
-					System.out.print("Tree after delete: ");
-					this.printTree();
+					//this.printTree();
 					return toReturn;				
 					}
 				else { //node has 2 children
-					System.out.println("Node has 2 children");
+					//System.out.println("Node has 2 children");
 					toReturn = node.value;
 					TreeNode temp = node.right;
 					if (temp.left != null) {
@@ -149,31 +144,25 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 					node.key = temp.key;
 					node.value = temp.value; //replaces node with temp's info
 					totalNodes--;
-					System.out.println("toReturn: " + toReturn);				
-					System.out.print("Tree after delete: ");
-					this.printTree();
+					//this.printTree();
 					return toReturn;					
 				}		
 			}
 		else if (node.left == null && node.right == null) { //case 2: node is a leaf
 			if (node.parent.left == node) { //leaf is left child
-				System.out.println("Leaf is left child");
+				//System.out.println("Leaf is left child");
 				toReturn = node.value;
 				node.parent.left = null;
 				totalNodes--;
-				System.out.println("toReturn: " + toReturn);				
-				System.out.print("Tree after delete: ");
-				this.printTree();
+				//this.printTree();
 				return toReturn;
 			}
 			else { //leaf is right child
-				System.out.println("Leaf is right child");
+				//System.out.println("Leaf is right child");
 				toReturn = node.value;
-				System.out.println("toReturn: " + toReturn);				
 				node.parent.right = null;
 				totalNodes--;
-				System.out.print("Tree after delete: ");
-				this.printTree();
+				//this.printTree();
 				return toReturn;
 			}
 		}
@@ -188,8 +177,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 					parent.right = temp;
 				}
 				totalNodes--;
-				System.out.print("Tree after delete: ");
-				this.printTree();
+				//this.printTree();
 				return toReturn;
 		}
 		else if (node.left == null && node.right != null) { //case 4: node has right child
@@ -207,12 +195,11 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 					parent.right = temp;
 				}
 				totalNodes--;
-				System.out.print("Tree after delete: ");
-				this.printTree();
+				//this.printTree();
 				return toReturn;
 		}
 		else { //case 5: node has 2 children
-			System.out.println("Node has 2 children");
+			//System.out.println("Node has 2 children");
 			toReturn = node.value;
 			TreeNode temp = node.right;
 			if (temp.left != null) {
@@ -228,8 +215,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 			node.key = temp.key;
 			node.value = temp.value; //replaces node with temp's info
 			totalNodes--;
-			System.out.print("Tree after delete: ");
-			this.printTree();
+			//this.printTree();
 			return toReturn;
 		}
 
@@ -262,7 +248,6 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 	public edu.gwu.algtest.ComparableKeyValuePair search(java.lang.Comparable key) {
 		
 		found = false;
-		System.out.println("Setting found to false");
 		TreeNode node = recursiveSearch(this.getRoot(), key);
 
 		if (found) {
@@ -278,9 +263,9 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 
 	public TreeNode recursiveSearch(TreeNode node, Comparable key) {
 	
-		System.out.println("Searching for key: " + key);
+		//System.out.println("Searching for key: " + key);
 		if (key.compareTo(node.key) == 0) {
-			System.out.println("Setting found to true");
+			//System.out.println("Setting found to true");
 			found = true;
 			return node;
 		}
@@ -305,9 +290,9 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 
 		public TreeNode recursiveSearch2(TreeNode node, Comparable key) {
 	
-		System.out.println("Searching for key: " + key);
+		//System.out.println("Searching for key: " + key);
 		if (key.compareTo(node.key) == 0) {
-			System.out.println("Setting found to true");
+			//System.out.println("Setting found to true");
 			found = true;
 			return node;
 		}
@@ -334,17 +319,15 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 
 
 		TreeNode parent = node.parent;
-		//TreeNode parentparent = node.parent.parent;
-
-		System.out.println("Performing splaystep on: " + node.key);
+		//System.out.println("Performing splaystep on: " + node.key);
 
 		if (node == this.getRoot()) {
-			System.out.println("Node is already root");
+			//System.out.println("Node is already root");
 			return;
 		}
 		if (node == this.getRoot().left || node == this.getRoot().right) { //case 1
 			if (node == this.getRoot().left) { //case 1a: target node is root's left child
-				System.out.println("case 1a: ");
+				//System.out.println("case 1a: ");
 				TreeNode temp = node.right;
 				this.root.left = null;
 				node.right = this.getRoot();
@@ -353,11 +336,11 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 				if (temp != null) {
 					this.insertNode(temp);
 				}
-				this.printTree();
+				//this.printTree();
 				return;
 			}
 			else { //case 1b: target node is root's right child
-				System.out.println("case 1b: ");
+				//System.out.println("case 1b: ");
 				TreeNode temp = node.left;
 				this.root.right = null;
 				node.left = this.getRoot();
@@ -367,12 +350,12 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 				if (temp != null) {
 					this.insertNode(temp);
 				}
-				this.printTree();
+				//this.printTree();
 				return;
 			}
 		}
 		else if (this.isLeftChild(node) && this.isLeftChild(node.parent)) { //case2: target and target's parents are left children
-				System.out.println("case 2: ");
+				//System.out.println("case 2: ");
 				TreeNode temp, child;
 				child = this.root.left;
 				temp = child.right;
@@ -383,18 +366,18 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 					this.insertNode(temp);
 				}
 
-				this.printTree();
-				System.out.println("Root: " + this.getRoot());
+				//this.printTree();
+				//System.out.println("Root: " + this.getRoot());
 				//if node is not the root, splaystep again
 				if (this.root != node) {
-					System.out.println("Splaystep again");
+					//System.out.println("Splaystep again");
 					this.splaystep(node);
 				}
 
 
 		}
 		else if (this.isRightChild(node) && this.isRightChild(node.parent)) { //case 3: target and target's parent are right children
-				System.out.println("case 3: ");
+				//System.out.println("case 3: ");
 				TreeNode temp, child;
 				child = this.root.right;
 				temp = child.left;
@@ -406,17 +389,17 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 				}
 
 				this.printTree();
-				System.out.println("Root: " + this.getRoot());
+				//System.out.println("Root: " + this.getRoot());
 				//if node is not the root, splaystep again
 				if (this.root != node) {
-					System.out.println("Splaystep again");
+					//System.out.println("Splaystep again");
 					this.splaystep(node);
 				}
 
 
 		}
 		else if (this.isRightChild(node) && this.isLeftChild(node.parent)) { //case 4: target is right child, parent is left child
-				System.out.println("case 4: ");
+				//System.out.println("case 4: ");
 				TreeNode temp, child;
 				temp = node.left;
 				node.left = parent;
@@ -426,13 +409,13 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 				}
 				//if node is not the root, splaystep again
 				if (this.root != node) {
-					System.out.println("Splaystep again");
+					//System.out.println("Splaystep again");
 					this.splaystep(node);
 				}
 
 		}
 		else if (this.isLeftChild(node) && this.isRightChild(node.parent)) { //case 5: target is left child, parent is right child
-				System.out.println("case 5: ");
+				//System.out.println("case 5: ");
 				TreeNode temp, child;
 				temp = node.right;
 				node.right = parent;
@@ -442,7 +425,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 				}
 				//if node is not the root, splaystep again
 				if (this.root != node) {
-					System.out.println("Splaystep again");
+					//System.out.println("Splaystep again");
 					this.splaystep(node);
 				}
 		}
@@ -479,7 +462,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 
 	public java.util.Enumeration getKeys() {
 		KeyEnumerator keys = new KeyEnumerator();
-		System.out.println("Totalnodes: " + totalNodes);
+		//System.out.println("Totalnodes: " + totalNodes);
 		keys.createKeysEnumerator(totalNodes, this.getRoot());
 		return keys;
 
@@ -487,7 +470,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 
 	public java.util.Enumeration getValues() {
 		ValueEnumerator values = new ValueEnumerator();
-		System.out.println("Totalnodes: " + totalNodes);
+		//System.out.println("Totalnodes: " + totalNodes);
 		values.createValuesEnumerator(totalNodes, this.getRoot());
 		return values;
 	}
@@ -498,7 +481,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 
 
 	public void initialize(int maxSize) {
-		System.out.println("Initializing new tree...");
+		//System.out.println("Initializing new tree...");
 		this.root = null;
 		totalNodes = 0; //counter to keep track of treenodes
 
@@ -517,7 +500,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 		System.out.println("Key: " + key);
 		KeyEnumerator keys = new KeyEnumerator();
 		keys.createKeysEnumerator(totalNodes, this.getRoot());
-		System.out.println("Successor: " + keys.nextKey(key));
+		//System.out.println("Successor: " + keys.nextKey(key));
     	return keys.nextKey(key);   
     }
 
@@ -526,7 +509,7 @@ public class SelfAdjTree implements TreeSearchAlgorithm {
 		System.out.println("Key: " + key);		
 		KeyEnumerator keys = new KeyEnumerator();
 		keys.createKeysEnumerator(totalNodes, this.getRoot());
-		System.out.println("Predecessor: " + keys.prevKey(key));
+		//System.out.println("Predecessor: " + keys.prevKey(key));
     	return keys.prevKey(key);
     }
 
