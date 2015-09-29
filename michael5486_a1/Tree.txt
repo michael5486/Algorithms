@@ -388,3 +388,21 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 
     }
 }
+
+
+	public int height(TreeNode node) {
+
+		boolean addHeight = false;
+		if (node.left != null) {
+			height(node.left);
+			addHeight = true;
+		}
+		if (node.right != null) {
+			height(node.right);
+			addHeight = true;
+		}
+		if (addHeight) {
+			height++;
+		}
+		return height + 1; //+1 accounts for node
+	}

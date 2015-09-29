@@ -27,15 +27,17 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 
 		TreeNode newNode = new TreeNode(key, value, null, null, null);
 		if (this.getRoot() == null) {
-			System.out.println("Inserting root: " + key);
+			//System.out.println("Inserting root: " + key);
 			this.root = newNode;
+			totalNodes++;
+
 		}
 		else {
-			System.out.println("Inserting child: " + key);
+			//System.out.println("Inserting child: " + key);
+			totalNodes++;
 			recursiveInsert(this.getRoot(), key, value);
 		}
-		this.printTree();
-		totalNodes++;
+	//	this.printTree();
 		return newNode;
 	}
 
@@ -68,7 +70,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 	public TreeNode findNode(TreeNode node, Comparable key) {
 		TreeNode foundNode = null;
 		if (key.compareTo(node.key) == 0) { //found matching node, return KeyValue pair
-			System.out.println("Found node: " + key);
+			//System.out.println("Found node: " + key);
 			foundNode = node;
 		}
 		else if (key.compareTo(node.key) < 0) { //recursiveSearch continues on left child
@@ -89,41 +91,41 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		Object toReturn = null;
 		TreeNode node = this.findNode(this.getRoot(), key);
 
-		System.out.println("Deleting: " + key);
+		//System.out.println("Deleting: " + key);
 		if (node == null) { //case 1: node not found
-			System.out.print("KeyValue pair not found");
+			//System.out.print("KeyValue pair not found");
 			return toReturn;
 		}
 		else if (node == this.getRoot()) { //node is the leaf
 				if (node.left == null && node.right == null) {
-					System.out.println("Removing node with no children");
+					//System.out.println("Removing node with no children");
 					toReturn = node.value;
 					this.root = null;
-					totalNodes = 0;
-					System.out.print("Tree after delete: ");
+					totalNodes--;
+				//	System.out.print("Tree after delete: ");
 					this.printTree();
 					return toReturn;
 					}
 				else if (node.left != null && node.right == null) { //node has left child
-					System.out.println("Removing node with left child");
+				//	System.out.println("Removing node with left child");
 					toReturn = node.value;
 					this.root = node.left;
-					totalNodes = 0;
-					System.out.print("Tree after delete: ");
+					totalNodes--;
+				//	System.out.print("Tree after delete: ");
 					this.printTree();
 					return toReturn;
 				}	
 				else if (node.left == null && node.right != null) { //node has right child
-					System.out.println("Removing node with right child");
+				//	System.out.println("Removing node with right child");
 					toReturn = node.value;
 					this.root = node.right;
-					totalNodes = 0;
-					System.out.print("Tree after delete: ");
+					totalNodes--;
+				//	System.out.print("Tree after delete: ");
 					this.printTree();
 					return toReturn;				
 					}
 				else { //node has 2 children
-					System.out.println("Node has 2 children");
+				//	System.out.println("Node has 2 children");
 					toReturn = node.value;
 					TreeNode temp = node.right;
 					if (temp.left != null) {
@@ -138,31 +140,26 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 					node.key = temp.key;
 					node.value = temp.value; //replaces node with temp's info
 					totalNodes--;
-					System.out.println("toReturn: " + toReturn);				
-					System.out.print("Tree after delete: ");
-					this.printTree();
+				//	System.out.print("Tree after delete: ");
+				//	this.printTree();
 					return toReturn;					
 				}		
 			}
 		else if (node.left == null && node.right == null) { //case 2: node is a leaf
 			if (node.parent.left == node) { //leaf is left child
-				System.out.println("Leaf is left child");
+			//	System.out.println("Leaf is left child");
 				toReturn = node.value;
 				node.parent.left = null;
 				totalNodes--;
-				System.out.println("toReturn: " + toReturn);				
-				System.out.print("Tree after delete: ");
-				this.printTree();
+				//this.printTree();
 				return toReturn;
 			}
 			else { //leaf is right child
-				System.out.println("Leaf is right child");
+			//	System.out.println("Leaf is right child");
 				toReturn = node.value;
-				System.out.println("toReturn: " + toReturn);				
 				node.parent.right = null;
 				totalNodes--;
-				System.out.print("Tree after delete: ");
-				this.printTree();
+				//this.printTree();
 				return toReturn;
 			}
 		}
@@ -177,8 +174,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 					parent.right = temp;
 				}
 				totalNodes--;
-				System.out.print("Tree after delete: ");
-				this.printTree();
+			//	this.printTree();
 				return toReturn;
 		}
 		else if (node.left == null && node.right != null) { //case 4: node has right child
@@ -196,12 +192,11 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 					parent.right = temp;
 				}
 				totalNodes--;
-				System.out.print("Tree after delete: ");
-				this.printTree();
+			//	this.printTree();
 				return toReturn;
 		}
 		else { //case 5: node has 2 children
-			System.out.println("Node has 2 children");
+		//	System.out.println("Node has 2 children");
 			toReturn = node.value;
 			TreeNode temp = node.right;
 			if (temp.left != null) {
@@ -217,8 +212,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 			node.key = temp.key;
 			node.value = temp.value; //replaces node with temp's info
 			totalNodes--;
-			System.out.print("Tree after delete: ");
-			this.printTree();
+			//this.printTree();
 			return toReturn;
 		}
 	}
@@ -248,7 +242,6 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 	}
 
 	public edu.gwu.algtest.ComparableKeyValuePair search(java.lang.Comparable key) {
-		System.out.println("Key: " + key);
 		return recursiveSearch(this.getRoot(), key);
 	}
 
@@ -256,7 +249,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 		ComparableKeyValuePair pair = null;
 
 		if (key.compareTo(node.key) == 0) { //found matching node, return KeyValue pair
-			System.out.println("Found node: " + key);
+		//	System.out.println("Found node: " + key);
 			pair = new ComparableKeyValuePair(key, node.value);
 		}
 		else if (key.compareTo(node.key) < 0) { //recursiveSearch continues on left child
@@ -273,11 +266,16 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 	}
 
 	public java.util.Enumeration getKeys() {
-		return null;
+		KeyEnumerator keys = new KeyEnumerator();
+		keys.createKeysEnumerator(totalNodes, this.getRoot());
+		return keys;
+
 	}
 
 	public java.util.Enumeration getValues() {
-		return null;
+		ValueEnumerator values = new ValueEnumerator();
+		values.createValuesEnumerator(totalNodes, this.getRoot());
+		return values;
 	}
 
 	public int getCurrentSize() {
@@ -285,29 +283,10 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
 	}
 
 	public void initialize(int maxSize) {
-		System.out.println("Initializing new tree...");
+		//System.out.println("Initializing new tree...");
 		this.root = null;
-		int totalNodes = 0; //counter to keep track of TreeNodes
-		Comparable[] keys = null;
-		Object[] values = null;
-		int index = 0;
-	}
-
-	public int height(TreeNode node) {
-
-		boolean addHeight = false;
-		if (node.left != null) {
-			height(node.left);
-			addHeight = true;
-		}
-		if (node.right != null) {
-			height(node.right);
-			addHeight = true;
-		}
-		if (addHeight) {
-			height++;
-		}
-		return height + 1; //+1 accounts for node
+		totalNodes = 0; //counter to keep track of TreeNodes
+		index = 0;
 	}
 
 	public String getName() {
@@ -319,11 +298,20 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
     }
 
 	public java.lang.Comparable successor(java.lang.Comparable key) {
-    	return null;
+		
+		System.out.println("Key: " + key);
+		KeyEnumerator keys = new KeyEnumerator();
+		keys.createKeysEnumerator(totalNodes, this.getRoot());
+		System.out.println("Successor: " + keys.nextKey(key));
+    	return keys.nextKey(key);
     }
 
     public java.lang.Comparable predecessor(java.lang.Comparable key) {
-    	return null;
+		System.out.println("Key: " + key);		
+		KeyEnumerator keys = new KeyEnumerator();
+		keys.createKeysEnumerator(totalNodes, this.getRoot());
+		System.out.println("Predecessor: " + keys.prevKey(key));
+    	return keys.prevKey(key);
     }
 
 
@@ -345,6 +333,7 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
     }
 
     public static void main(String[] args) {
+    	//These are various testing methods I used to create and debug my tree  
     	BinarySearchTree tree = new BinarySearchTree();
     	tree.insert("10", "10");
     	tree.insert("11", "11");
@@ -357,7 +346,6 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
     	tree.insert("18", "18");
     	tree.insert("19", "19");
 
-    	System.out.println("Height: " + tree.height(tree.getRoot()));
     	//System.out.println(tree.getRoot().toString());
     	//tree.printTree();
     	System.out.println("Search for A: " + tree.search("A"));
@@ -366,9 +354,9 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
     	System.out.println("Minimum: " + tree.minimum());
     	System.out.println("Current size: " + tree.getCurrentSize());
     	//System.out.println("Parent of A: " + tree.findNode(tree.getRoot(), "A").parent);
-    	tree.delete("10");
+    	//tree.delete("10");
     	tree.delete("12");
-    	System.out.println("Test: " + tree.delete("19"));
+    	//System.out.println("Test: " + tree.delete("19"));
     	//tree.delete("G");
     	/*tree.delete("18");
     	System.out.println("Node: " + tree.getRoot());
@@ -377,9 +365,26 @@ public class BinarySearchTree implements TreeSearchAlgorithm {
     	System.out.println("Search for 10: " + tree.search("10"));
     	System.out.println("Search for 12: " + tree.search("12"));
     	System.out.println("Search for 19: " + tree.search("19"));*/
+        
+        ValueEnumerator ds = new ValueEnumerator();
+        Enumeration e = tree.getValues();
+        System.out.println("Enumerator: ");
+        while (e.hasMoreElements()) {
+            String s = (String) e.nextElement();
+            System.out.println (s);
+        }
 
+        KeyEnumerator ds2 = new KeyEnumerator();
+        Enumeration e2 = tree.getKeys();
+        System.out.println("Enumerator keys: ");
+        while (e2.hasMoreElements()) {
+            String s = (String) e2.nextElement();
+            System.out.println (s);
+        }
 
+        System.out.println("Successor of 10: " + tree.successor(10));
+        System.out.println("Predeccessor of 19: " + tree.predecessor(19));
 
-
-    }
+	}
+    
 }
