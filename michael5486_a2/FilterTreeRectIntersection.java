@@ -7,7 +7,9 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
 
     public FilterTreeNode root;
     public IntPair[] intersected; 
-    public LinkedList<IntPair> tempIntersection;   
+    public LinkedList<IntPair> tempIntersection; 
+    public FilterTreeNode newNode;  
+    public int count;
     
     public FilterTreeRectIntersection() {
         this.root = null;
@@ -85,9 +87,14 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
 
     public void recursiveFilterTreeSearch(FilterTreeNode node, IntRectangle rect) {
 
-        //LinkedList<IntRectangle> temp = new LinkedList<IntRectangle>();
         if (!node.rectList.isEmpty())  { //checks if rectangle is instersected by rectangles in the filter tree
+            
+            //this is where I can modify search
+
+
             for (int i = 0; i < node.rectList.size(); i++) {
+                
+
                 if (this.testIntersection((IntRectangle)node.rectList.get(i), rect)) {
                     //return (IntRectangle)node.rectList.get(i); //intersecting rectangle found, return that rectangle
                    // System.out.println("Intersection at: " + (IntRectangle)node.rectList.get(i) + " and " + rect);
@@ -106,9 +113,33 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
         //return temp; //if no intersections are found, returns null
     }
 
+
     public void makeFilterTree(IntRectangle[] rectSet) {
 
-        FilterTreeNode newNode = new FilterTreeNode(0, 100, 0, 100, 1);
+        int maxX = 0, minX = 0, maxY = 0, minY = 0, x1, x2, y1, y2;
+
+        for (int j = 0; j < rectSet.length; j++) {
+            x1 = rectSet[j].topLeft.x;
+            y1 = rectSet[j].topLeft.y;
+            x2 = rectSet[j].bottomRight.x;
+            y2 = rectSet[j].bottomRight.y;       
+
+            if (x2 > maxX) {
+                maxX = x2;
+            }
+            if (x1 < minX) {
+                minX = x1;
+            }
+            if (y1 > maxY) {
+                maxY = y1;
+            }
+            if (y2 < minY) {
+                minY = y2;
+            }
+
+        }
+
+        FilterTreeNode newNode = new FilterTreeNode(minX, maxX, minY, maxY, 1);
         this.root = newNode;
         System.out.println("Added root");
 
@@ -118,32 +149,32 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
     }
 
     public void recursiveInsertRect(FilterTreeNode node, IntRectangle rect) {
-       // System.out.println("midx : " + node.midX + "midy: " + node.midY);
-       // System.out.print(this.testRectBisectIntersection(node, rect));
-        System.out.println(this.findQuadrant(node, rect));
-        if (this.findQuadrant(node, rect) == -1) { //rect bisects node
-            node.rectList.add(rect);
-
-          //  System.out.println("Added " + rect.toString() + " to " + node.level);
-            return;
-
-        }
+        //System.out.println("Quadrant: " + this.findQuadrant(node, rect));
         
+
+        if (this.findQuadrant(node, rect) == -1) { //check if bisects node
+            node.rectList.add(rect);
+            return;
+          //  System.out.println("Added " + rect.toString() + " to " + node.level);
+        }
+        else { 
             int quadrant = this.findQuadrant(node, rect);
-            int realQuadrant = quadrant;
             if (quadrant == 3) {
-                realQuadrant = 1;
+                quadrant = 1;
             }
             else if (quadrant == 1) {
-                realQuadrant = 3;
+             quadrant = 3;
             }
 
             if (node.quadrants[quadrant] == null) {
-                FilterTreeNode newNode = new FilterTreeNode(quadrant, node);
-                node.quadrants[realQuadrant] = newNode;
+                newNode = new FilterTreeNode(quadrant, node);
+                node.quadrants[quadrant] = newNode;
+                //System.out.println("Code track 1.....");
                 recursiveInsertRect(newNode, rect);
+
             }
             else {
+                //System.out.println("Code track 2.....");                
                 recursiveInsertRect(node.quadrants[quadrant], rect);
             }
         }

@@ -93,3 +93,35 @@
                         tempIntersection.add(tempPair);
                     }
               //  }
+
+
+
+
+
+        System.out.println("Quadrant: " + this.findQuadrant(node, rect));
+        
+
+        if (this.findQuadrant(node, rect) == -1) { //Checks if rect bisects node
+            node.rectList.add(rect);
+          //  System.out.println("Added " + rect.toString() + " to " + node.level);
+        }
+        else { //determines the quadrant of the newNode
+            int quadrant = this.findQuadrant(node, rect);
+            //int realQuadrant = 1;
+            
+            if (quadrant == 3) {
+                quadrant = 1;
+            }
+            else if (quadrant == 1) {
+             quadrant = 3;
+            }
+
+            if (node.quadrants[quadrant] == null) {
+                FilterTreeNode newNode = new FilterTreeNode(quadrant, node);
+                node.quadrants[quadrant] = newNode;
+                recursiveInsertRect(newNode, rect);
+            }
+            else {
+                recursiveInsertRect(node.quadrants[quadrant], rect);
+            }
+        }
