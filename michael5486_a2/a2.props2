@@ -61,7 +61,7 @@ testCorrectness=true
 specialTest=false
 
 # test for performance?
-testPerformance=true
+testPerformance=false
 # Test sizes for performance testing.
 numTests=5
 param0_testSize0=1000

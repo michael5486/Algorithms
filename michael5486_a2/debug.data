@@ -17,7 +17,7 @@ displayTime=true
 rectangleSetIntersectionTester.smallRectMin=5
 alg1=FilterTreeRectIntersection
 A8=1.0
-testPerformance=true
+testPerformance=false
 alg0=NaiveRectIntersection
 A7=1.0
 A6=1.0
@@ -60,3 +60,4 @@ ALGORITHM: michael5486's implementation of NaiveRectIntersection Algorithm
  => passed: Test 4: 10 random tests with 8 in each set
  => passed: Test 5: 10 random tests with 1000 in each set
 ALGORITHM: michael5486's implementation of FilterTreeRectIntersection Algorithm
+ => passed: Test 1: no intersections

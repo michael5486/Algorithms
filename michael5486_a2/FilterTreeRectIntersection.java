@@ -6,6 +6,8 @@ import java.util.*;
 public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgorithm {
 
     public FilterTreeNode root;
+    public IntPair[] intersected; 
+    public LinkedList<IntPair> tempIntersection;   
     
     public FilterTreeRectIntersection() {
         this.root = null;
@@ -44,42 +46,64 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
 
     }
 
-    public boolean testRectBisectIntersection(FilterTreeNode node, IntRectangle rect1) {
-        int x1, x2, y1, y2, midX, midY;
-        midX = node.midX;
-        midY = node.midY;
-        x1 = rect1.topLeft.x;
-        y1 = rect1.topLeft.y;
-        x2 = rect1.bottomRight.x;
-        y2 = rect1.bottomRight.y; 
-       // System.out.println(x1+ " " + x2 + " " + y1 + " " + y2);
-        if ((x1 < midX && x2 > midX) || (y2 < midY && y1 > midY)) { //Rect intersects bisection of node
-            return true;
-        }
-        else { //Rect doesn't intersect node bisection
-            return false;
-        }
+    public IntPair[] findIntersections(IntRectangle[] rectSet1, IntRectangle[] rectSet2) {
+       
+        int numIntersections = 0;
+        //First, place data rectangles in rectSet1 into tree
+        this.makeFilterTree(rectSet1);
+        //Now scan rectangles in second set and query against tree.
+        //need to compare rectangles from rectSet2 to the ones in the tree
 
+
+            LinkedList intersectionSet = filterTreeSearch(rectSet2);
+            if (intersectionSet.size() == 0) {
+                return null;
+            }
+            else {
+              //  System.out.println("IntersectionSet: " + intersectionSet);
+                intersected = new IntPair[intersectionSet.size()];
+                for (int i = 0; i < intersected.length; i++) {
+                    intersected[i] = (IntPair)tempIntersection.get(i);
+                }
+            tempIntersection = null;
+            return intersected;
+        }
     }
 
 
+    public LinkedList<IntPair> filterTreeSearch(IntRectangle[] rectSet) {
+            tempIntersection = new LinkedList<IntPair>();
 
-    public IntPair[] findIntersections(IntRectangle[] rectSet1, IntRectangle[] rectSet2) {
-        int numIntersections = 0;
-        //First, place data rectangles in rectSet1 into tree
-        makeFilterTree(rectSet1);
-        //Now scan rectangles in second set and query against tree.
-        for (int i = 0; i < rectSet2.length; i++) {
-            LinkedList intersectionSet = filterTreeSearch(rectSet2[i]);
-            if (!intersectionSet.isEmpty()) {
-                numIntersections += intersectionSet.size();
-                //Place intersections in intersectionSet into list of intersections
+            for (int i = 0; i < rectSet.length; i++) {
+                this.recursiveFilterTreeSearch(this.root, rectSet[i]);
             }
+            //System.out.println(tempIntersection);
 
+            return tempIntersection;
+        
+    }
 
+    public void recursiveFilterTreeSearch(FilterTreeNode node, IntRectangle rect) {
+
+        //LinkedList<IntRectangle> temp = new LinkedList<IntRectangle>();
+        if (!node.rectList.isEmpty())  { //checks if rectangle is instersected by rectangles in the filter tree
+            for (int i = 0; i < node.rectList.size(); i++) {
+                if (this.testIntersection((IntRectangle)node.rectList.get(i), rect)) {
+                    //return (IntRectangle)node.rectList.get(i); //intersecting rectangle found, return that rectangle
+                   // System.out.println("Intersection at: " + (IntRectangle)node.rectList.get(i) + " and " + rect);
+                    IntRectangle rectangle = (IntRectangle)node.rectList.get(i);
+                    IntPair tempPair = new IntPair(rectangle.ID, rect.ID);
+                    tempIntersection.add(tempPair);
+                }
+            }
         }
-        //return all intersections
-        return null;
+        for (int i = 0; i < 4; i++) { //if not in the root node, then it recursively continues to all the non-null quadrants
+            if (node.quadrants[i] != null) {
+                recursiveFilterTreeSearch(node.quadrants[i], rect);
+            }
+        }
+       // System.out.println("Temp: " + temp);
+        //return temp; //if no intersections are found, returns null
     }
 
     public void makeFilterTree(IntRectangle[] rectSet) {
@@ -96,82 +120,60 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
     public void recursiveInsertRect(FilterTreeNode node, IntRectangle rect) {
        // System.out.println("midx : " + node.midX + "midy: " + node.midY);
        // System.out.print(this.testRectBisectIntersection(node, rect));
-        if (this.testRectBisectIntersection(node, rect)) { //rect intersects node
+        System.out.println(this.findQuadrant(node, rect));
+        if (this.findQuadrant(node, rect) == -1) { //rect bisects node
             node.rectList.add(rect);
-            System.out.println("Added " + rect.toString() + " to " + node.level);
+
+          //  System.out.println("Added " + rect.toString() + " to " + node.level);
+            return;
 
         }
-        else {
-
-            FilterTreeNode quad0 = new FilterTreeNode(node.midX, 100, node.midX, 100, node.level + 1);
-            FilterTreeNode quad1 = new FilterTreeNode(0, node.midX, node.midY, 100, node.level + 1);
-            FilterTreeNode quad2 = new FilterTreeNode(0, node.midX, 0, node.midY, node.level + 1);
-            FilterTreeNode quad3 = new FilterTreeNode(node.midX, 100, 0, node.midY, node.level + 1);
-
-            if (this.testRectBisectIntersection(quad0, rect)) { //
-                node.quadrants[0] = quad0;
-                recursiveInsertRect(quad0, rect);
-
-            } 
-            else if (this.testRectBisectIntersection(quad1, rect)) {
-                node.quadrants[1] = quad1;
-                recursiveInsertRect(quad1, rect);
+        
+            int quadrant = this.findQuadrant(node, rect);
+            int realQuadrant = quadrant;
+            if (quadrant == 3) {
+                realQuadrant = 1;
             }
-            else if (this.testRectBisectIntersection(quad2, rect)) {
-                node.quadrants[2] = quad2;
-                recursiveInsertRect(quad2, rect);
-
+            else if (quadrant == 1) {
+                realQuadrant = 3;
             }
-            else if (this.testRectBisectIntersection(quad3, rect)) {
-                node.quadrants[3] = quad3;
-                recursiveInsertRect(quad3, rect);
+
+            if (node.quadrants[quadrant] == null) {
+                FilterTreeNode newNode = new FilterTreeNode(quadrant, node);
+                node.quadrants[realQuadrant] = newNode;
+                recursiveInsertRect(newNode, rect);
             }
             else {
-                System.out.println("Code is getting here");
-                if (this.rectInQuadrant(quad0, rect)) { //go to quadrant0
-                    System.out.println("to quad0");                   
-                    recursiveInsertRect(quad0, rect);
-                }
-                else if (this.rectInQuadrant(quad1, rect)) { //go to quadrant1
-                    System.out.println("to quad1");                    
-                    recursiveInsertRect(quad1, rect);
-                }
-                else if (this.rectInQuadrant(quad2, rect)) { //go to quadrant2
-                    System.out.println("to quad2");                    
-                    recursiveInsertRect(quad2, rect);
-                }
-                else { //go to quadrant 3
-                    System.out.println("to quad3");                    
-                    recursiveInsertRect(quad3, rect);
-                }
-            }   
+                recursiveInsertRect(node.quadrants[quadrant], rect);
+            }
         }
+
     }
 
-    public boolean rectInQuadrant(FilterTreeNode node, IntRectangle rect1) {
-        int x1, x2, x3, x4, y1, y2, y3, y4;
+    public int findQuadrant(FilterTreeNode node, IntRectangle rect1) {
+        int x1, x2, y1, y2, midX, midY;
+        midX = node.midX;
+        midY = node.midY;
         x1 = rect1.topLeft.x;
         y1 = rect1.topLeft.y;
         x2 = rect1.bottomRight.x;
         y2 = rect1.bottomRight.y;
-       /* System.out.println("node.leftX " + node.leftX+ "  > x1 " + x1);
-        System.out.println("node.topY " + node.topY+ "  > y1 " + y1);
-        System.out.println("x2 " + x2+ "  < node.rightX " + node.rightX);
-        System.out.println("node.botY " + node.botY+ "  < y2 " + y2);*/
-        System.out.println((node.leftX < x1)+" "+(node.topY > y1)+" "+(x2 < node.rightX)+" "+(node.botY < y2));
-
-        if (node.leftX < x1 && node.topY > y1 && x2 < node.rightX && node.botY < y2) {
-            return true;
+        if (x1 > midX && y1 > midY && x2 > midX && y2>midY) {
+            return 0; //rect in quadrant 0
+        }
+        else if (x1 < midX && y1 > midY && x2 < midX && y2 > midY) {
+            return 1; //rect in quadrant 1
+        }
+        else if (x1 < midX && y1 < midY && x2 < midX && y2 < midY) {
+            return 2; //rect in quadrant 2
+        }
+        else if (x1 > midX && y1 < midY && x2 > midX && y2 < midY) {
+            return 3; //rect in quadrent 3
         }
         else {
-            return false;
+            return -1; //rect bisects node
         }
 
-    }
-
-    public LinkedList filterTreeSearch(IntRectangle rectSet) {
-
-        return null;
     }
 
     public static void printSet(IntRectangle[] rectSet) { //prints Rectangles in each set
@@ -183,7 +185,8 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
 
     public void printTree(FilterTreeNode node) {
 
-        System.out.println("Level " + node.level + ": "+ node.rectList);
+        if (!node.rectList.isEmpty()) 
+            System.out.println("Level " + node.level + ": "+ node.rectList);
         for (int i = 0; i < 4; i++) {
             if (node.quadrants[i] != null) {
                 printTree(node.quadrants[i]);
@@ -198,23 +201,27 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
     	FilterTreeRectIntersection test = new FilterTreeRectIntersection();
     
     	//set 1
-    	IntRectangle[] set1 = new IntRectangle[6];
-    	IntRectangle r1 = new IntRectangle(89, 57, 91, 37);
+    	IntRectangle[] set1 = new IntRectangle[3];
+    	/*IntRectangle r1 = new IntRectangle(89, 57, 91, 37);
     	IntRectangle r2 = new IntRectangle(12, 80, 45, 66);
     	IntRectangle r3 = new IntRectangle(28, 40, 39, 29);
         IntRectangle r4 = new IntRectangle(18, 70, 32, 60);
         IntRectangle r5 = new IntRectangle(79, 94, 82, 90);
-        IntRectangle r6 = new IntRectangle(1, 5, 3, 7);
+        //IntRectangle r6 = new IntRectangle(1, 1, 1, 1);*/
+
+        IntRectangle r1 = new IntRectangle(5, 80, 20, 70);
+        IntRectangle r2 = new IntRectangle(20, 60, 40, 50);
+        IntRectangle r3 = new IntRectangle(20, 30, 40, 20);
 
 
     	set1[0] = r1;
    		set1[1] = r2;
     	set1[2] = r3;
-        set1[3] = r4;
-        set1[4] = r5;
-        set1[5] = r6;
+      //  set1[3] = r4;
+       // set1[4] = r5;
+       // set1[5] = r6;
 
-    	/*//set 2
+    	//set 2
     	IntRectangle[] set2 = new IntRectangle[4];
     	IntRectangle R4 = new IntRectangle(70, 80, 80, 70);
 	    IntRectangle R5 = new IntRectangle(30, 55, 60, 25);
@@ -223,11 +230,23 @@ public class FilterTreeRectIntersection implements RectangleSetIntersectionAlgor
     	set2[0] = R4;
 	    set2[1] = R5;
 	    set2[2] = R6;
-	    set2[3] = R7;*/
+	    set2[3] = R7;
 
 	    test.printSet(set1);
-        test.makeFilterTree(set1);
+        test.printSet(set2);
+        //test.makeFilterTree(set1);
+        IntPair[] testArray = test.findIntersections(set1, set2);
         test.printTree(test.root);
+        System.out.println("findIntersections: ");
+        for (int i = 0; i < testArray.length; i++) {
+            System.out.println(testArray[i]);
+        }
+
+
+
+        //FilterTreeNode newNode = new FilterTreeNode(0, 100, 0, 100, 1);
+        //System.out.println(test.findQuadrant(newNode, r6));
+
 	    //test.printSet(set2);
 
 	    /*IntPair[] pairs = test.findIntersections(set1, set2);
