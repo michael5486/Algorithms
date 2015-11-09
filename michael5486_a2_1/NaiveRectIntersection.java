@@ -13,7 +13,7 @@ public class NaiveRectIntersection implements RectangleSetIntersectionAlgorithm 
 
     }
 
-    public boolean testIntersection(IntRectangle rect1, IntRectangle rect2) {
+    public boolean testIntersection(IntRectangle rect1, IntRectangle rect2) { //tests is two rectangles intersect 
 
     	int x1, x2, x3, x4, y1, y2, y3, y4;
     	x1 = rect1.topLeft.x;
@@ -75,7 +75,7 @@ public class NaiveRectIntersection implements RectangleSetIntersectionAlgorithm 
     	}
     }
 
-    public static void main(String[] args) { 
+    public static void main(String[] args) { //code used to test my methods
 
     	NaiveRectIntersection test = new NaiveRectIntersection();
     

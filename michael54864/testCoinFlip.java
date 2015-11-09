@@ -174,10 +174,12 @@ public class testCoinFlip implements UndirectedGraphSearchAlgorithm {
 			for (int j = 0; j < loopCount; j++) {
 
 				test.initialize(verticeCount, false);
-				for (int i = 0; i < test.numVertices - 1; i++) {
-					if (test.randomCoinFlip(chance)) {
-						test.insertUndirectedEdge(i, i + 1, 1);
-					}		
+				for (int i = 0; i < test.numVertices; i++) {
+					for (int z = 0; z < test.numVertices; z++) {
+						if (test.randomCoinFlip(chance) && i != z) {
+							test.insertUndirectedEdge(i, z, 1);
+						}	
+					}	
 				}
 				//test.printGraph();					
 				sumComponents += test.numConnectedComponents();
@@ -195,10 +197,12 @@ public class testCoinFlip implements UndirectedGraphSearchAlgorithm {
 			for (int j = 0; j < loopCount; j++) {
 
 				test.initialize(verticeCount, false);
-				for (int i = 0; i < test.numVertices - 1; i++) {
-					if (test.randomCoinFlip(chance)) {
-						test.insertUndirectedEdge(i, i + 1, 1);
-					}		
+				for (int i = 0; i < test.numVertices; i++) {
+					for (int z = 0; z < test.numVertices; z++) {					
+						if (test.randomCoinFlip(chance) && i != z) {
+							test.insertUndirectedEdge(i, z, 1);
+						}	
+					}	
 				}
 				sumComponents += test.numConnectedComponents();
 			}

@@ -29,7 +29,7 @@ public class Kruskal implements SpanningTreeAlgorithm {
 
 	public void initialize(int vertices) {
 
-		System.out.println("Initializing " + vertices + " vertices");
+		//System.out.println("Initializing " + vertices + " vertices");
 		//adds vertices to  graph
 		numVertices = vertices;
 		adjMatrix = new double[vertices][vertices];
@@ -126,7 +126,7 @@ public class Kruskal implements SpanningTreeAlgorithm {
 	}
 
 	public double getTreeWeight() {
-		System.out.println("getTreeWeight");
+		//System.out.println("getTreeWeight");
 		double sumWeight = 0;
 		for (int i = 0; i < numVertices; i++) {
 			for (int j = 0; j < numVertices; j++) {
@@ -155,10 +155,10 @@ public class Kruskal implements SpanningTreeAlgorithm {
 				System.out.print(i + "    ");
 				for (int j = 0; j < numVertices; j++) {
 					if (matrix[i][j] == 0) {
-						System.out.print("[     ] ");
+						System.out.printf("[     ] ");
 					}
 					else {
-						System.out.print("[ " + matrix[i][j] + " ] ");
+						System.out.printf("[ %.2f] ", matrix[i][j]);
 					}
 				}
 				System.out.print("\n");
@@ -166,23 +166,42 @@ public class Kruskal implements SpanningTreeAlgorithm {
 		}
 	}
 
-	public static void generateRandomPoints(int totalVertices) {
-		double X[] = new double[totalVertices];
+	public void generateRandomPoints(int totalVertices) {
 		double Y[] = new double[totalVertices];
-		double weight;
+		double X[] = new double[totalVertices];
+		double weight, temp, sumOfSums = 0;
+		double loopCount = 100;
 
-		for (int i = 0; i < totalVertices; i++) {
-			X[i] = UniformRandom.uniform();
-			Y[i] = UniformRandom.uniform();
-		}
-		for (int i = 0; i < totalVertices; i++) {
-			for (int j = 0; j < totalVertices; j++) {
-				weight = Math.sqrt(  (X[i] - X[j] * (X[i] - X[j])) +  ((Y[i] - Y[j] * Y[i] - Y[j]))   ); //distance formula
-				this.insertUndirectedEdge(i, j, weight);
+		for (double k = 0; k < loopCount; k++) {
+			this.initialize(totalVertices);
+
+			for (int i = 0; i < totalVertices; i++) {
+				X[i] = UniformRandom.uniform();
+				Y[i] = UniformRandom.uniform();
 			}
+
+			for (int i = 0; i < totalVertices; i++) {
+				//System.out.printf("X[%d]: %.2f Y[i]: %.2f\n", i, X[i], Y[i]);
+			}
+
+			for (int i = 0; i < totalVertices; i++) {
+				for (int j = 0; j < totalVertices; j++) {
+					temp = ((X[i] - X[j]) * (X[i] - X[j])) +  ((Y[i] - Y[j]) * (Y[i] - Y[j]));
+					//System.out.println("temp: " + temp);
+					weight = Math.sqrt(temp); //distance formula
+					//System.out.println(weight);
+					this.insertUndirectedEdge(i, j, weight);
+				}
+			}
+			//this.printGraph(this.adjMatrix);
+
+			//System.out.println("mst of " + totalVertices + " vertices: ");
+			this.minimumSpanningTree(this.adjMatrix);
+			//System.out.println("mst weight: " + this.getTreeWeight());
+			sumOfSums += this.getTreeWeight();
 		}
 
-		this.printGraph(this.adjMatrix);
+		System.out.println("Average MST when n = " + totalVertices + ": " + (sumOfSums/loopCount));
 
 
 	}
@@ -211,8 +230,12 @@ public class Kruskal implements SpanningTreeAlgorithm {
 		//System.out.println("minimumSpanningTree: ");
 		test.minimumSpanningTree(test.adjMatrix);
 		System.out.println("mst weight: " + test.getTreeWeight());*/
-		test.generateRandomPoints(10);
+		
+		for (int i = 0; i <= 100; i += 10) {
+			test.generateRandomPoints(i);
+		}
 
+		//test.printGraph(test.adjMatrix);
 
 
 	}
