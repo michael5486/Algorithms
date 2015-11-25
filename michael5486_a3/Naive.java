@@ -15,38 +15,32 @@ public class Naive implements MTSPAlgorithm{
     }
 
 
-    public int[] convertListToArray(ArrayList<Integer> list) {
+    public void printSalesmanArray(int[][] array) {
 
-    	int[] tempArray = new int[list.size()];
-    	for (int i = 0; i < list.size(); i++) {
-    		tempArray[i] = list.get(i);
+
+    	for (int i = 0; i < array.length; i++) {
+
+    		System.out.print("   ");
+    		for (int j = 0; j < array[i].length; j++) {
+    			System.out.print(array[i][j] + ", ");
+    		}
+    		System.out.print("\n");
+
     	}
-    	return tempArray;
-
-
     }
+
+    //Naive algorithm divides the points as evenly as possible among the salesmen
 
 	public int[][] computeTours (int m, Pointd[] points) {
 
-		//this algorithm will divide the # of points by the # of salesmen
-		//it will split up the remainders
-
-		//int[][] salesmanArray = new int[m][0];
-		//ArrayList<Integer>[] salesmanArrayList = new ArrayList<Integer>()[m];
-		System.out.println("points.length: "  + points.length);
-		System.out.println("m: " + m);
+		//System.out.println("points.length: "  + points.length);
+		//System.out.println("m: " + m);
 
 		System.out.println("points: ");
-		for (int i = 0; i < points.length; i++) {
+		/*for (int i = 0; i < points.length; i++) {
 			System.out.println(i + ":    " + points[i].toString());
 
-		}
-
-		
-		//for (int i = 0; i < points.length; i++) {
-
-		//	int[i % 2][points]
-		//}
+		}*/
 
 		int[] countArray = new int[m]; //makes an array to find the sizes for each salesman
 		for (int i = 0; i < m; i++) {
@@ -57,9 +51,9 @@ public class Naive implements MTSPAlgorithm{
 			countArray[j % m]++;
 
 		}
-		for (int k = 0; k < m; k++) {
-			System.out.println("Path length for salesman[" + i + "] " + countArray[k]);
-		}
+		/*for (int k = 0; k < m; k++) {
+			System.out.println("Path length for salesman[" + k + "]  " + countArray[k]);
+		}*/
 
 		//now the arrays have the right sizes
 
@@ -73,56 +67,28 @@ public class Naive implements MTSPAlgorithm{
 		
 		for (int i = 0; i < points.length; i++) {
 
-			System.out.println(rowLoc + ", " + columnLoc);
+			//System.out.println(rowLoc + ", " + columnLoc);
 			salesmanArray[rowLoc][columnLoc] = i;
-
 			columnLoc++;
 
 			if (columnLoc == columnMax) {
 				if (countArrayLoc < m - 1) {
 					countArrayLoc++;
 					columnMax = countArray[countArrayLoc];
-					System.out.println(" hit");
+					//System.out.println(" hit");
 					columnLoc = 0;
 					rowLoc++;
 				}
 			}
-			if (rowLoc == rowMax) {
+			/*if (rowLoc == rowMax) {
 				System.out.println("finished");
 				break;
 				
-			}
-
+			}*/
 
 		}
 
-		/*while (rowLoc < rowMax) {
-
-			while (columnLoc < columnMax) {
-
-
-			}
-
-
-		}*/
-
-
-
-		/*int columnLoc = 0, rowLoc = 0;
-
-		for (int i = 0; i < points.length; i++) {
-
-			for (int j = i)
-
-
-		}*/
-
-
-
-		
-
-
-
+		printSalesmanArray(salesmanArray);
 		return salesmanArray;
 	}
 
@@ -130,9 +96,6 @@ public class Naive implements MTSPAlgorithm{
 
 
 	public static void main(String[] args) {
-
-
-
 
 	}
 

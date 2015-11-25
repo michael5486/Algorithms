@@ -1,0 +1,10 @@
+    /*public int[] convertListToArray(ArrayList<Integer> list) {
+
+    	int[] tempArray = new int[list.size()];
+    	for (int i = 0; i < list.size(); i++) {
+    		tempArray[i] = list.get(i);
+    	}
+    	return tempArray;
+
+
+    }*/

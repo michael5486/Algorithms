@@ -55,6 +55,6 @@ Loading algorithm# 2 name=/Users/Michael/Desktop/cs3212/michael5486_a3/Annealing
 Loading algorithm# 3 name=/Users/Michael/Desktop/cs3212/michael5486_a3/MyAlgorithm ... 
  ... completed.
 ALGORITHM: michael5486's implementation of NaiveMTSP
-ALGORITHM: michael5486's implementation of NaiveMTSP
-ALGORITHM: michael5486's implementation of NaiveMTSP
-ALGORITHM: michael5486's implementation of NaiveMTSP
+ALGORITHM: michael5486's implementation of GreedyMTSP
+ALGORITHM: michael5486's implementation of AnnealingMTSP
+ALGORITHM: michael5486's implementation of MyAlgorithmMTSP

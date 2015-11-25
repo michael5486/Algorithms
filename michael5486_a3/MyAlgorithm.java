@@ -5,7 +5,7 @@ import edu.gwu.geometry.*;
 public class MyAlgorithm implements MTSPAlgorithm{
 
 	public String getName() {
-		return "michael5486's implementation of NaiveMTSP";
+		return "michael5486's implementation of MyAlgorithmMTSP";
 	}
 
 	public void setPropertyExtractor (int algID, PropertyExtractor props) {
