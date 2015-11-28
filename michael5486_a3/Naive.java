@@ -33,15 +33,6 @@ public class Naive implements MTSPAlgorithm{
 
 	public int[][] computeTours (int m, Pointd[] points) {
 
-		//System.out.println("points.length: "  + points.length);
-		//System.out.println("m: " + m);
-
-		System.out.println("points: ");
-		/*for (int i = 0; i < points.length; i++) {
-			System.out.println(i + ":    " + points[i].toString());
-
-		}*/
-
 		int[] countArray = new int[m]; //makes an array to find the sizes for each salesman
 		for (int i = 0; i < m; i++) {
 			countArray[i] = 0; //initializes each element to 0
@@ -51,9 +42,6 @@ public class Naive implements MTSPAlgorithm{
 			countArray[j % m]++;
 
 		}
-		/*for (int k = 0; k < m; k++) {
-			System.out.println("Path length for salesman[" + k + "]  " + countArray[k]);
-		}*/
 
 		//now the arrays have the right sizes
 
@@ -71,29 +59,21 @@ public class Naive implements MTSPAlgorithm{
 			salesmanArray[rowLoc][columnLoc] = i;
 			columnLoc++;
 
-			if (columnLoc == columnMax) {
+			if (columnLoc == columnMax) { //allocates points to each salesman
 				if (countArrayLoc < m - 1) {
 					countArrayLoc++;
 					columnMax = countArray[countArrayLoc];
-					//System.out.println(" hit");
+
 					columnLoc = 0;
 					rowLoc++;
 				}
 			}
-			/*if (rowLoc == rowMax) {
-				System.out.println("finished");
-				break;
-				
-			}*/
 
 		}
 
-		printSalesmanArray(salesmanArray);
+		//printSalesmanArray(salesmanArray);
 		return salesmanArray;
 	}
-
-
-
 
 	public static void main(String[] args) {
 

@@ -8,3 +8,30 @@
 
 
     }*/
+
+        	/*
+    	int point1 = Math.random() * arrayList.get(salesman1).length();
+    	int point2 = Math.random() * arrayList.get(salesman2).length();
+
+    	int indexPoint1 = arrayList.get(salesman1).indexOf(point1);
+    	int indexPoint2 = arrayList.get(salesman2).indexOf(point2);
+
+    	System.out.print("Swapping %d and %d\n", indexPoint1, indexPoint2);
+
+    	arrayList.get(salesman1).remove(indexPoint1); //removes randomly selected point from salesman1
+    	arrayList.get(salesman2).remove(indexPoint2); //removes randomly selected point from salesman2
+
+    	arrayList.get(salesman1).add(point2); //adds point from salesman2 to salesman1
+    	arrayList.get(salesman2).add(point1); //adds point from salesman1 to salesman2*/
+
+    	//printSalesmen(arrayList);
+
+                /*for (int k = 0; k < m; k++) {
+            System.out.println("Path length for salesman[" + k + "]  " + countArray[k]);
+        }*/
+
+                    /*if (rowLoc == rowMax) {
+                System.out.println("finished");
+                break;
+                
+            }*/
