@@ -31,14 +31,13 @@ public class MyAlgorithm implements MTSPAlgorithm{
     	Pointd point2 = points[end];
     	double x1 = point1.x, y1 = point1.y, x2 = point2.x, y2 = point2.y;
 
-
     	double temp = (x2 - x1)* (x2 - x1) + (y2 - y1) * (y2 - y1);
     	double distance = Math.sqrt(temp);
 
     	return distance;
     }
 
-    public int findClosestSalesman(ArrayList<ArrayList<Integer>> arrayList, int start, Pointd[] points) { //finds the closes salesman with respect to the input point
+    public int findClosestSalesman(ArrayList<ArrayList<Integer>> arrayList, int start, Pointd[] points) { //finds the salesman with an allocated point closest to the inputted point
 
     	double minDistance = 100;
     	int minSalesman = 0;
@@ -58,12 +57,11 @@ public class MyAlgorithm implements MTSPAlgorithm{
 
     	}
 
-    	//System.out.println("minDistance: " + minDistance + " minSalesman: " + minSalesman);
     	return minSalesman;
 
     }
 
-    public int[] fillWithValues(int m, Pointd[] points) {
+    public int[] fillWithValues(int m, Pointd[] points) { //returns an array the size of m, with random unique values from 0 to points.length
 
     	ArrayList<Integer> array = new ArrayList<Integer>(); 
 
@@ -74,7 +72,7 @@ public class MyAlgorithm implements MTSPAlgorithm{
     	Collections.shuffle(array);
 
     	int[] intArray = new int[m];
-    	for (int i = 0; i < m; i++) {
+    	for (int i = 0; i < m; i++) {  //adds the first m values to the array
     		intArray[i] = array.get(i);
 
     	}
@@ -83,8 +81,10 @@ public class MyAlgorithm implements MTSPAlgorithm{
 
     }
 
-    public double calcArrayDistance(int[] array, Pointd[] points) {
+    public double calcArrayDistance(int[] array, Pointd[] points) { 
     	
+    	//calculates the tour distance to cover all points in the array
+
     	double distance = 0;
     	for (int i = 0; i < array.length - 1; i++) {
     		distance += calcDistance(i, i + 1, points);
@@ -102,7 +102,13 @@ public class MyAlgorithm implements MTSPAlgorithm{
     	double maxDistance = 0, tempDistance;
     	int[] maxArray = null;
 
-    	//runs this 100 times, keeping track of the one that has the greatest distance
+    	/*loops 100 times, keeping track of the one that has the greatest distance
+    	By using the array with the largest tour distance, there is a good chance this
+    	assortment of points has points that are farthest away from each other.
+    	By initializing each salesmam each with one of these points, the salesmen start
+    	far away from one another. This is, in most cases, more efficient because the salesmen
+    	don't have to travel far to reach every point. However, this is not true in all cases.
+    	The other algorithms fare better in certain scenarios.*/
 
     	for (int i = 0; i < 100; i++) {
 
@@ -131,7 +137,7 @@ public class MyAlgorithm implements MTSPAlgorithm{
 
     }
 
-    public int[][] convertToIntArray(ArrayList<ArrayList<Integer>> arrayList) { //makes an int[][] equivalent to the arrayList
+    public int[][] convertToIntArray(ArrayList<ArrayList<Integer>> arrayList) { //makes an int[][] that is equivalent to the arrayList
 
     	int[][] array = new int[arrayList.size()][];
     	for (int i = 0; i < arrayList.size(); i++) {
@@ -152,19 +158,20 @@ public class MyAlgorithm implements MTSPAlgorithm{
 
 	public int[][] computeTours (int m, Pointd[] points) {
 
-
+		//initializes each salesman with 1 point, but tries to make the points as far away as possible from one another
 		ArrayList<ArrayList<Integer>> salesmenArrayList = findMaxDistance(m, points);
 
 		for (int i = 0; i < points.length; i++) {
 
-			//initializes each salesman with 1 point, bu tries to make the points as far away as possible from one another
-
-			//need to find the salesman with the closes point to a given point
+			//finds the salesman with the closest allocated point to a given point
 			int salesman = findClosestSalesman(salesmenArrayList, i, points);
 
+			//if the salesman doesn't already contain that point, then allocate it to him 
+			//(must be checked, because the point may have been randomly allocated in the beginning)
 			if (!salesmenArrayList.get(salesman).contains(i)) {
 				salesmenArrayList.get(salesman).add(i);
 			}
+
 
 			//printSalesmen(salesmenArrayList);
 
@@ -174,9 +181,6 @@ public class MyAlgorithm implements MTSPAlgorithm{
 
 		return toReturn;
 	}
-
-
-
 
 	public static void main(String[] args) {
 

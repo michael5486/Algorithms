@@ -46,32 +46,27 @@ public class Annealing implements MTSPAlgorithm{
 
     }   
 
-    public ArrayList<ArrayList<Integer>> randomNextState(ArrayList<ArrayList<Integer>> arrayList) { //randomly removes a point from one salesman and adds it to another
+    public ArrayList<ArrayList<Integer>> randomNextState(ArrayList<ArrayList<Integer>> arrayList) { //removes a point from a randomly selected salesman and gives it to another salesman
 
-
-    	int salesman1 = (int)(Math.random() * arrayList.size()); //will create a random number from 0 to m
-		int salesman2 = (int)(Math.random() * arrayList.size());    	
+    	int salesman1 = (int)(Math.random() * arrayList.size()); //selects a random salesman to remove point from
+		int salesman2 = (int)(Math.random() * arrayList.size()); //selects a random salesman to allocate point to	
     	
     	int pointLoc1 = (int)(Math.random() * arrayList.get(salesman1).size());
-    	//System.out.printf("salesman1: %d salesman2: %d pointLoc1: %d\n", salesman1, salesman2, pointLoc1);
 
     	if (arrayList.get(salesman1).isEmpty()) {
     		return arrayList; //salesman1 is empty, cannot swap
     	}
+
     	int point1 = arrayList.get(salesman1).get(pointLoc1);
-    	
-
-    	//System.out.println("point1: " + point1);
-
 
     	arrayList.get(salesman1).remove(pointLoc1); //removes randomly selected point from salesman1
-    	arrayList.get(salesman2).add(point1); //adds point from salesman1 to salesman2*/
+    	arrayList.get(salesman2).add(point1); //adds point from salesman1 to salesman2
 
     	return arrayList;
 
     }
 
-    public double calcCostOfTour(ArrayList<Integer> arrayList, Pointd[] points) {
+    public double calcCostOfTour(ArrayList<Integer> arrayList, Pointd[] points) { //calculates the cost of each salesman's tour
 
     	double sum = 0;
 
@@ -82,14 +77,17 @@ public class Annealing implements MTSPAlgorithm{
 
     }
 
-    public double cost(ArrayList<ArrayList<Integer>> arrayList, Pointd[] points) {
+    public double cost(ArrayList<ArrayList<Integer>> arrayList, Pointd[] points) { //calculates the cost of each state by returning the longest individual salesman's tour
 
-    	double sum = 0;
+    	double maxCost = 0;
 
     	for (int i = 0; i < arrayList.size(); i++) {
-    		sum += calcCostOfTour(arrayList.get(i), points);
+    		double temp = calcCostOfTour(arrayList.get(i), points);
+            if (temp > maxCost) {
+                maxCost = temp;
+            }
     	}
-    	return sum;
+    	return maxCost;
     }
 
     public double calcDistance(int start, int end, Pointd[] points) {
@@ -98,25 +96,24 @@ public class Annealing implements MTSPAlgorithm{
     	Pointd point2 = points[end];
     	double x1 = point1.x, y1 = point1.y, x2 = point2.x, y2 = point2.y;
 
-
     	double temp = (x2 - x1)* (x2 - x1) + (y2 - y1) * (y2 - y1);
     	double distance = Math.sqrt(temp);
 
     	return distance;
     }    
 
-    public ArrayList<ArrayList<Integer>> TSPSimulatedAnnealing(ArrayList<ArrayList<Integer>> arrayList, Pointd[] points) {
+    public ArrayList<ArrayList<Integer>> TSPSimulatedAnnealing(ArrayList<ArrayList<Integer>> arrayList, Pointd[] points) { //allocates points to each salesman with simulated annealing
 
     	ArrayList<ArrayList<Integer>> s = arrayList;
 
     	double min = cost(arrayList, points);
     	ArrayList<ArrayList<Integer>> minTour = s;
 
-    	T = 1;
+    	T = 1; //initial value for T
 
-    	for (int i = 0; i < 10000; i++) {
+    	for (int i = 0; i < 10000; i++) { //iterates a large amount of times
 
-    		ArrayList<ArrayList<Integer>> sPrime = randomNextState(s);
+    		ArrayList<ArrayList<Integer>> sPrime = randomNextState(s); //s' is a new random state
 
     		if (cost(sPrime, points) < cost(s, points)) {
     			s = sPrime;
@@ -134,35 +131,43 @@ public class Annealing implements MTSPAlgorithm{
     			s = sPrime;
 
     		}
-    		else {
+    		/*else {
+    			System.out.println("Not jumping to new state");
+    		}*/
 
-    			//System.out.println("Not jumping to new state");
-    		}
+    		//Decreases temperature
+    		T = T - .1;
 
-    		//Decrease temperature
-    		T = T - 0.00001;
-
+    		//printSalesmen(arrayList);
 
     	}
 
     	return minTour;
 
-
     }
 
-    public boolean expCoinFlip(ArrayList<ArrayList<Integer>> s, ArrayList<ArrayList<Integer>> sPrime, Pointd[] points) {
+    public boolean expCoinFlip(ArrayList<ArrayList<Integer>> s, ArrayList<ArrayList<Integer>> sPrime, Pointd[] points) { //calculates the chance that we jump to the new state, even if the cost is worse
 
-    	double p = Math.exp( -(cost(sPrime, points) - cost(s, points)) / T);
-    	//System.out.println("P: " + p);
-    	//System.out.println("T: " + T);
+        double costSPrime = cost(sPrime, points);
+        double costS = cost(s, points);
+        //System.out.println("cost(sPrime): " + costSPrime + "cost(s): " + costS);
+        
+        double difference = costSPrime - costS;
+      //  System.out.println("difference: " + difference);
+
+        double p = Math.exp(-1 * difference);
+    	//System.out.println("p: " + p);
+        p = p / T;
 
     	double u = UniformRandom.uniform(0, 1);
+
     	if (u < p) {
     		return true;
     	}
     	else {
+            //this should return false more as time goes on
     		return false;
-    	}
+        }
 
     }
 
@@ -170,39 +175,32 @@ public class Annealing implements MTSPAlgorithm{
 
 		ArrayList<ArrayList<Integer>> salesmenArrayList = new ArrayList<ArrayList<Integer>>();
 
-		/*System.out.println("num of salesmen: " + m);
-		System.out.println("points: ");
-		for (int i = 0; i < points.length; i++) {
-			System.out.println(i + ":    " + points[i].toString());
+		/*for (int i = 0; i < points.length; i++) {
+			System.out.println(points[i].toString());
 
 		}*/
 
 		for (int i = 0; i < m; i++) { //for each salesman, create a linkedList
 			ArrayList<Integer> temp = new ArrayList<Integer>();
 			salesmenArrayList.add(temp);
-			//System.out.println("Added salesman " + i);
 		}
 
 		for (int i = 0; i < points.length; i++) {
 			salesmenArrayList.get(0).add(i);
 
 		}
-
-		//System.out.println("cost: " + cost(salesmenArrayList, points));
 		
 		TSPSimulatedAnnealing(salesmenArrayList, points);
 
 		int[][] toReturn = convertToIntArray(salesmenArrayList);
 
-		//printSalesmen(salesmenArrayList);
+		//lsprintSalesmen(salesmenArrayList);
 
 		return toReturn;
 
 	}
 
 	public static void main(String[] args) {
-
-
 
 
 	}

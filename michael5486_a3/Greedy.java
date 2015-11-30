@@ -114,7 +114,7 @@ public class Greedy implements MTSPAlgorithm{
 				//System.out.println("Empty salesman #" + num);
 				salesmenArrayList.get(num).add(i);
 			}
-			else { //need to find the salesman with the closes point to a given point
+			else { //need to find the salesman with an allocated point closest to the given point
 				int salesman = findClosestSalesman(salesmenArrayList, i, points);
 				//System.out.println("adding to salesman " + salesman);
 				salesmenArrayList.get(salesman).add(i);
