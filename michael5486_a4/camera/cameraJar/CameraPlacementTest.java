@@ -2,8 +2,8 @@ public class CameraPlacementTest {
 
     public static void main (String[] argv)
     {
-	demo1 ();
-	//demo2 ();
+	//demo1 ();
+	demo2 ();
 	//smallSizeTestCases ();
 	//largeSizeTestCases ();
     }
@@ -38,9 +38,9 @@ public class CameraPlacementTest {
     static void demo2 ()
     {
 	// Here we'll merely test IterativeDummyAlgorithm, without display.
-	int problemNum = 1;
+	int problemNum = 2;
 	CameraPlacementProblem problem = CameraProblemFactory.getProblem ("small", problemNum);
-	CameraPlacementAlgorithm alg = new IterativeDummyAlgorithm ();
+	CameraPlacementAlgorithm alg = new michael5486Algorithm();
 	CameraPlacementResult result = CameraPlacement.runAlgorithm (alg, problem, true, true);
     }
 

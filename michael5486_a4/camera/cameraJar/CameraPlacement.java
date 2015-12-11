@@ -234,6 +234,10 @@ public class CameraPlacement extends JPanel {
 		results = results + "\nInvalid camera location: " + camera.toString();
 		camResult.numIllegalPlacements ++;
 	    }
+	    //delete this
+	    //else {
+	    //	System.out.println("wallType: " + wallType);	
+	    //}
 	}
 
 	if (results != null) {
