@@ -269,9 +269,8 @@ public class CameraPlacement extends JPanel {
 		}
 	    }
 	}
-
-	camResult.percentCovered = 100.0*(double)camResult.numCovered/(double)(camResult.numCovered+camResult.numNotCovered);
-	    String coverSummary = "\nTotal tiles= " + total +
+	camResult.percentCovered = 100.0*(double) camResult.numCovered/(double)total;
+	String coverSummary = "\nTotal tiles= " + total +
 	    ", # covered= " + camResult.numCovered +
 	    ", # not Covered= " + camResult.numNotCovered +
 	    ", % covered= " + camResult.percentCovered;

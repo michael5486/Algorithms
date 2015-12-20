@@ -3,9 +3,9 @@ public class CameraPlacementTest {
     public static void main (String[] argv)
     {
 	//demo1 ();
-	//demo2 ();
+	demo2 ();
 	//smallSizeTestCases ();
-	largeSizeTestCases ();
+	//largeSizeTestCases ();
     }
 
     static void demo1 ()
@@ -13,25 +13,25 @@ public class CameraPlacementTest {
 	// Three ways to use CameraPlacement:
 
 	// 1. Use it to merely display a problem:
-	CameraPlacementProblem problem = CameraProblemFactory.getProblem ("small", 0);
+	CameraPlacementProblem problem = CameraProblemFactory.getProblem ("small", 2);
 	CameraPlacement.displayProblem (problem);
 
 	// 2. Run an algorithm on a problem WITHOUT display.
 	// Running without display is useful for iterative algorithms.
 
 	CameraPlacementAlgorithm alg = new DummyAlgorithm ();
-	CameraPlacementResult result = CameraPlacement.runAlgorithm (alg, problem, false, false);
-	System.out.println (result);
+	//CameraPlacementResult result = CameraPlacement.runAlgorithm (alg, problem, false, false);
+	//System.out.println (result);
 
 	// 3. Run an algorithm on a problem WITH display NOT showing cameras,
 	//    but showing coverage.
-	System.out.println("run with display");
-	result = CameraPlacement.runAlgorithm (alg, problem, true, false);
-	System.out.println (result);
+	//System.out.println("run with display");
+	//result = CameraPlacement.runAlgorithm (alg, problem, true, false);
+	//System.out.println (result);
 
 	// 4. Run an algorithm on a problem WITH display AND showing cameras.
 	System.out.println("run with display");
-	result = CameraPlacement.runAlgorithm (alg, problem, true, true);
+	CameraPlacementResult result = CameraPlacement.runAlgorithm (alg, problem, true, true);
 	System.out.println (result);
     }
 
@@ -39,8 +39,8 @@ public class CameraPlacementTest {
     {
 	// Here we'll merely test IterativeDummyAlgorithm, without display.
 	int problemNum = 2;
-	CameraPlacementProblem problem = CameraProblemFactory.getProblem ("large", problemNum);
-	CameraPlacementAlgorithm alg = new michael5486Algorithm();
+	CameraPlacementProblem problem = CameraProblemFactory.getProblem ("small", problemNum);
+	CameraPlacementAlgorithm alg = new michael5486Algorithm ();
 	CameraPlacementResult result = CameraPlacement.runAlgorithm (alg, problem, true, true);
     }
 
@@ -49,7 +49,7 @@ public class CameraPlacementTest {
 	int numProblems = CameraProblemFactory.getNumSmall ();
 	for (int problemNum=0; problemNum<numProblems; problemNum++) {
 	    // Replace DummyAlgorithm with your algorithm.
-	    CameraPlacementAlgorithm alg = new michael5486Algorithm ();
+	    CameraPlacementAlgorithm alg = new DummyAlgorithm ();
 
 	    CameraPlacementProblem problem = CameraProblemFactory.getProblem ("small", problemNum);
 	    CameraPlacementResult result = CameraPlacement.runAlgorithm (alg, problem, false, false);
@@ -63,9 +63,9 @@ public class CameraPlacementTest {
 	int numProblems = CameraProblemFactory.getNumLarge ();
 	for (int problemNum=0; problemNum<numProblems; problemNum++) {
 	    // Replace DummyAlgorithm with your algorithm.
-	    CameraPlacementAlgorithm alg = new michael5486Algorithm ();
+	    CameraPlacementAlgorithm alg = new DummyAlgorithm ();
 
-	    CameraPlacementProblem problem = CameraProblemFactory.getProblem ("large", problemNum);
+	    CameraPlacementProblem problem = CameraProblemFactory.getProblem ("small", problemNum);
 	    CameraPlacementResult result = CameraPlacement.runAlgorithm (alg, problem, false, false);
 	    System.out.println ("RESULTS on large size problem# " + problemNum);
 	    System.out.println (result);

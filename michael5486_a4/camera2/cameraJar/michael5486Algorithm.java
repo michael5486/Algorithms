@@ -5,19 +5,13 @@ public class michael5486Algorithm implements CameraPlacementAlgorithm {
     // Algorithm should solve and return list of Camera instances
     // as camera locations and orientations.
 
+    double T = 100;
     ArrayList<Pointd> validPoints;
-    double T = .95;    
-    public static final int NUM_LOOPS = 1000;
-    public static final double DECREASE_NUM = .97;
-    public static final int RETURN_TO_BEST_INIT_COUNT = 20;
-    public static final int WORSE_STATE_INIT_COUNT = 10;
-    int worse_state_counter = WORSE_STATE_INIT_COUNT;
-    int returnToBest_counter = RETURN_TO_BEST_INIT_COUNT;
 
 
     public double cost(CameraPlacementProblem problem, ArrayList<Camera> cameraList) {
     	
-    	//calculates the cost of each state, percentageCovered/numCameras
+    	//calculates the cost of each state, aka total covered blocks/numCameras
     	CameraPlacementResult camResult = new CameraPlacementResult ();
 		camResult.cover = CameraGeometry.findCover(problem.getMaxX(),
 			     problem.getMaxY(),
@@ -46,28 +40,8 @@ public class michael5486Algorithm implements CameraPlacementAlgorithm {
 			return 0;
 		}
 
-		percentCovered = 100.0*(double) numCovered / (double)total;
-		ratio = percentCovered / numCameras;
-
-        //places more value on having a fully covered map
-        //System.out.println("percentCovered: " + percentCovered);
-        if (percentCovered < 100 && percentCovered >= 95) {
-            ratio = ratio * 2;
-        }
-        if (percentCovered < 95 && percentCovered >= 90) {
-            ratio = ratio * 1.75;
-        }
-        if (percentCovered < 90 && percentCovered >= 80) {
-            ratio = ratio * 1.2;
-
-        }
-        if (percentCovered < 80 && percentCovered >= 70) {
-            ratio = ratio;
-
-        }
-        else {
-            ratio = ratio * .1;
-        }
+		//percentCovered = 100.0*(double) numCovered / (double)total;
+		ratio = numCovered / numCameras;
 
 		//System.out.println("cost: " + ratio);
 		return ratio;
@@ -103,7 +77,7 @@ public class michael5486Algorithm implements CameraPlacementAlgorithm {
     	ArrayList<Camera> newCamList = new ArrayList<Camera>(cameraList);
     	int u = (int)(Math.random() * 10);    	
 
-    	if (u < 6) { //add
+    	if (u < 3) { //add
 
 			if (!validPoints.isEmpty()) {
     			//adds a new camera
@@ -150,41 +124,38 @@ public class michael5486Algorithm implements CameraPlacementAlgorithm {
 
     }
 
-    public int expCoinFlip(CameraPlacementProblem problem, ArrayList<Camera> s, ArrayList<Camera> sPrime) {
+    public boolean expCoinFlip(CameraPlacementProblem problem, ArrayList<Camera> s, ArrayList<Camera> sPrime) {
 
     	double difference = cost(problem, s) - cost(problem, sPrime);
 
-    	if (difference == 0) { 
-    		return 0;
+    	if (difference == 0) { //when difference is 0, e^0 will always be 1
+    		return false;
     	}
 
+    	//System.out.println("difference: " + difference);
     	double u = Math.random();
+    	System.out.println("T: " + T);
+    	
+    	double p = Math.exp((difference * -1) / T);
+    	System.out.println("u = " + u);
+    	System.out.println("p = " + p);
+    	
 
-        double p = T;    	
-
-    	if (u < p && worse_state_counter < 0) {
-            //worse state counter prevents it from jumping into a worse state right away
-            //I ran into problems where it would have a good state and then jump to a bad one very quickly
-
+    	if (u < p) {
     		System.out.println("T: " + T);
     		System.out.println("u = " + u);
-    		System.out.println("p = " + p);
-            worse_state_counter = WORSE_STATE_INIT_COUNT;    		
-    		return 1;
+    		System.out.println("p = " + p);    		
+    		return true;
     	}
-        if (p == 0) {
-            return -1;
-        }
     	else {
-    		worse_state_counter--;
-            return 0;
+    		return false;
     	}
 
 
 
     }
 
-    public ArrayList<Camera> camSimulatedAnnealing(CameraPlacementProblem problem) { //performs simulated annealing, looking for state with the highest cost
+    public ArrayList<Camera> camSimulatedAnnealing(CameraPlacementProblem problem) {
 
     	ArrayList<Camera> s = new ArrayList<Camera>();
     	validPoints = validPoints(problem);
@@ -192,11 +163,9 @@ public class michael5486Algorithm implements CameraPlacementAlgorithm {
     	double max = cost(problem, s);
     	ArrayList<Camera> maxState = s;
 
-    	for (int i = 0; i < NUM_LOOPS; i++) {
+    	for (int i = 0; i < 100; i++) {
 
     		ArrayList<Camera> sPrime = randomNextState(problem, s);
-
-            System.out.println("loop #: " + i);
 
     		if (cost(problem, sPrime) > cost(problem, s)) {
     			System.out.println("Jumping to new state...");
@@ -210,28 +179,15 @@ public class michael5486Algorithm implements CameraPlacementAlgorithm {
     			}
     			System.out.println("maxCost: " + max);
     		}
-    		else if (expCoinFlip(problem, s, sPrime) == 1) {
-
+    		else if (expCoinFlip(problem, s, sPrime)) {
+    			//System.out.println("Shouldn't add anything...");
     			System.out.println("Jumping to worse state...");
     			s = new ArrayList<Camera>(sPrime);
 
     		}
-            /*else if (expCoinFlip(problem, s, sPrime) == -1) {
-                break;
-                //breaks loop once p == 0
-            }*/
-
-            if (returnToBest_counter < 0) { //if a better state hasn't been found in a while, it returns to the best state
-                System.out.println("Returning to best state...");
-                s = new ArrayList<Camera>(maxState);
-                returnToBest_counter = RETURN_TO_BEST_INIT_COUNT;
-            }            
     		else {
     			//System.out.println("Decreasing temp...");
-    			T = T * DECREASE_NUM;
-                returnToBest_counter--;
-
-
+    			T = T * .95;
     		}
 
     	}
